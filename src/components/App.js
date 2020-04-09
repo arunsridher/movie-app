@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import {data} from '../data';
+import { data } from '../data';
 import Navbar from './Navbar';
 import MoviewCard from './MovieCard';
 // import movies from '../reducers';
-import {addMovies, setShowFavourites} from '../actions';
+import { addMovies, setShowFavourites } from '../actions';
 
 class App extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     //Make api call
-    const {store} = this.props;
+    const { store } = this.props;
     store.subscribe(() => {
       this.forceUpdate();
     });
@@ -17,24 +17,25 @@ class App extends Component {
     console.log('STATE', store.getState());
   }
 
-  isMovieFavourite = (movie) =>{
-    const {favourites} = this.props.store.getState();
-      const index = favourites.indexOf(movie);
-      if(index !== -1){
-        //found movie
-        return true;
-      }
-      return false;
+  isMovieFavourite = (movie) => {
+    const { movies } = this.props.store.getState();
+    const index = movies.favourites.indexOf(movie);
+    if (index !== -1) {
+      //found movie
+      return true;
+    }
+    return false;
   }
 
-  onChangeTab(val){
-    const {store} = this.props;
+  onChangeTab(val) {
+    const { store } = this.props;
     store.dispatch(setShowFavourites(val));
   }
 
-  render(){
-    const {list, favourites, showFavourites} = this.props.store.getState();
-    const displayMovies = showFavourites? favourites : list;
+  render() {
+    const { movies } = this.props.store.getState();
+    const { list, favourites, showFavourites } = movies;
+    const displayMovies = showFavourites ? favourites : list;
     return (
       <div className="App">
         <Navbar />
@@ -48,12 +49,12 @@ class App extends Component {
             </div>
           </div>
           <div className="list">
-            {displayMovies.map((movie, index) =>(
+            {displayMovies.map((movie, index) => (
               <MoviewCard
                 movie={movie}
                 key={`movies-${index}`}
                 dispatch={this.props.store.dispatch}
-                isFavourite = {this.isMovieFavourite(movie)}  
+                isFavourite={this.isMovieFavourite(movie)}
               />
             ))}
           </div>
